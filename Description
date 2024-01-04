@@ -1,0 +1,67 @@
+This repository demonstrates object detection and zone triggering for video analysis using YOLOv8 and the Supervision library.
+
+Key features:
+
+Object detection with YOLOv8: Leverages the YOLOv8 model for real-time object detection in videos.
+Zone triggering: Defines specific polygonal zones within the video frame and triggers actions when objects enter those zones.
+Visual annotations: Overlays bounding boxes, labels, and zone indicators on the video frames for visual clarity.
+Video processing: Processes entire videos efficiently using the Supervision library's video processing tools.
+
+Code structure:
+
+Environment setup: Checks for required libraries and installs them if needed.
+Model loading: Loads the pre-trained YOLOv8 model for object detection.
+Zone definition: Creates polygonal zones of interest within the video frame.
+Detection and annotation: Processes each video frame through the model, detects objects, triggers zones, and annotates the frame with bounding boxes, labels, and zone indicators.
+Video output: Saves the annotated video to a new file.
+
+Potential applications:
+
+Surveillance: Monitor specific areas for intrusion detection or object counting.
+Traffic monitoring: Track vehicles and pedestrians in traffic scenes.
+Sports analysis: Analyze player movements and interactions in sports videos.
+Retail analytics: Track customer behavior and product interactions in retail stores.
+Safety monitoring: Detect safety hazards or anomalies in industrial settings.
+
+Instructions:
+
+Clone this repository.
+Install the required libraries: pip install ultralytics supervision
+Download the sample videos: mall.mp4 and subway.mp4
+Run the Jupyter Notebook to process the videos and visualize the results.
+
+Implementation Details of the Script:
+
+Environment Setup and Library Loading:
+
+The script begins by checking the NVIDIA driver version using !nvidia-smi and then loads the torch library.
+The TORCH_VERSION and CUDA_VERSION are extracted from the torch version string.
+The current working directory is retrieved using os.getcwd() and stored in the HOME variable.
+The ultralytics library is installed using !pip install ultralytics.
+The supervision library is installed using !pip install supervision==0.2.0.
+Video and Model Download:
+
+Two sample videos, mall.mp4 and subway.mp4, are downloaded using !wget after extracting download links from Google Drive.
+YOLOv8 Model and Object Detection:
+
+A pre-trained YOLOv8 model (yolov8s.pt) is loaded using the YOLO class from ultralytics.
+The script defines a function process_frame that takes a video frame as input.
+Inside process_frame:
+The model detects objects in the frame using model(frame, imgsz=1280).
+The detections are converted to the Detections format from supervision.
+Only detections with class_id 0 (person) are kept for further processing.
+Zone Definition and Triggering:
+
+Two polygonal zones are defined using NumPy arrays:
+polygon for the entire area in the subway video.
+tpolygon for a specific area within the polygon.
+Each zone is created as a PolygonZone object from supervision, specifying the polygon and frame resolution.
+The trigger method of each zone is called with the filtered detections to check if any person enters the respective zone.
+Annotation and Video Processing:
+
+A BoxAnnotator from supervision is used to draw bounding boxes and labels on the detections.
+Separate PolygonZoneAnnotators are used for both zones, drawing outlines and labels using specific colors and thicknesses.
+The annotated frame is returned by the process_frame function.
+The sv.process_video function is used to process the entire subway.mp4 video, calling process_frame for each frame and saving the annotated frames to a new video file, SUBWAY_VIDEO.mp4.
+
+The Supervision library offers more advanced features like anomaly detection, multi-object tracking, and zone management.
